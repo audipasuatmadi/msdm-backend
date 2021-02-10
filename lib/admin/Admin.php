@@ -2,7 +2,7 @@
 
 namespace lib\admin;
 
-use lib\utils\BaseCredentials;
+use lib\utils\interfaces\BaseCredentials;
 
 class Admin implements BaseCredentials
 {
