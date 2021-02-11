@@ -2,8 +2,6 @@
 
 namespace token\interfaces;
 
-use lib\utils\interfaces\BaseCredentials;
-
 
 
 interface IToken {
@@ -22,11 +20,4 @@ interface IToken {
      * @return void
      */
     public function setToken(string $token);
-    /**
-     * Fungsi ini akan me return Credentials Utama Pengguna
-     * Digunakan untuk mencari admin jika diketahui token
-     *
-     * @return BaseCredentials
-     */
-    public function getUser();
 }
