@@ -5,6 +5,7 @@ require_once('./autoloader.php');
 use database\Database;
 use lib\admin\AdminRepository;
 use lib\admin\AdminService;
+use lib\admin\interfaces\IAdminService;
 use lib\token\TokenRepository as TokenTokenRepository;
 
 $database = new Database();
@@ -63,6 +64,12 @@ function handleLoginAdmin(AdminService $adminService, $requestBody) {
     }
 }
 
+function handleValidation(IAdminService $adminService, $requestBody) {
+    $token = (string) $requestBody['token'];
+    $val = $adminService->validate($token);
+    return $val;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $requestBody = json_decode(file_get_contents('php://input'), true);
@@ -77,5 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($requestBody['code'] == 2) {
         $response = handleLoginAdmin($adminService, $requestBody);
         echo $response;
+    }
+    if ($requestBody['code'] == 3) {
+        $response = handleValidation($adminService, $requestBody);
+        // var_dump($response);
+        echo $response['payload'];
     }
 }

@@ -43,12 +43,21 @@ class AdminService implements IAdminService
 
         //TODO: create and return a token
         if (password_verify($password, $repositoryReturn['password'])) {
-            return ['status' => 200, 'payload' => $repositoryReturn['id']];
+            return ['status' => 200, 'payload' => $repositoryReturn['username']];
         } else {
             return ['status'=> 403];
         }
         
     }
+
+    public function validate(string $token)
+    {
+        $adminId = (int) $token;
+        $admin = $this->repository->getById($adminId);
+        $username = $admin['username'];
+        return ['status' => 200, "payload" => $username];
+    }
+
     public function getAll()
     {
     }
