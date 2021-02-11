@@ -33,9 +33,16 @@ class AdminRepository implements IAdminRepository
                 $password = $adminData->getPassword();
 
                 $stmt->bind_param("ss", $username, $password);
-                return $stmt->execute();
+
+                $executeResult = $stmt->execute();
+                
+                if ($executeResult == 1) {
+                    return ['status' => 201, 'payload' => $conn->insert_id];
+                } else {
+                    return ['status' => 500, 'payload' => $executeResult];
+                }
             } else {
-                return 403;
+                return ['status' => 403, 'payload' => 403];
             }
             
         }

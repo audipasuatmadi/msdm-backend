@@ -4,16 +4,18 @@ namespace lib\admin;
 
 use lib\admin\interfaces\IAdminRepository;
 use lib\admin\interfaces\IAdminService;
-use lib\utils\interfaces\BaseCredentialsRepository;
-use lib\utils\interfaces\BaseRepository;
+use lib\token\interfaces\ITokenRepository;
+use lib\token\Token;
 
 class AdminService implements IAdminService
 {
     private IAdminRepository $repository;
+    private ITokenRepository $tokenRepository;
 
-    public function __construct(IAdminRepository $repository)
+    public function __construct(IAdminRepository $repository, ITokenRepository $tokenRepository)
     {
         $this->repository = $repository;
+        $this->tokenRepository = $tokenRepository;
     }
 
     public function create(string $username, string $password)
@@ -22,6 +24,13 @@ class AdminService implements IAdminService
 
         $admin = new Admin($username, $hashedPassword);
         $returnType = $this->repository->store($admin);
+
+        if ($returnType['status'] == 201) {
+            $token = new Token('pawdfkg124tkqdc_aw21', $returnType['payload']);
+            $this->tokenRepository->store($token);
+            $adminId = $token->getAdminId();
+            $returnType['payload'] = $adminId;
+        }
 
         return $returnType;
     }

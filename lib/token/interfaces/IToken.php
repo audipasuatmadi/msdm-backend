@@ -1,6 +1,6 @@
 <?php
 
-namespace token\interfaces;
+namespace lib\token\interfaces;
 
 
 
@@ -20,4 +20,10 @@ interface IToken {
      * @return void
      */
     public function setToken(string $token);
+
+    /**
+     *
+     * @return int
+     */
+    public function getAdminId();
 }

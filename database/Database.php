@@ -6,6 +6,11 @@ namespace interfaces;
 interface IDatabase
 {
     public function __construct($configuration = null);
+    /**
+     * Undocumented function
+     *
+     * @return \mysqli
+     */
     public function connect();
 }
 
