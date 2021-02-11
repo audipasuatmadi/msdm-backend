@@ -4,10 +4,11 @@ namespace lib\admin;
 // require '../utils/BaseInterfaces.php';
 
 use interfaces\IDatabase;
+use lib\admin\interfaces\IAdminRepository;
 use lib\utils\interfaces\BaseCredentialsRepository;
 
 
-class AdminRepository implements BaseCredentialsRepository
+class AdminRepository implements IAdminRepository
 {
     private IDatabase $database;
     
@@ -54,7 +55,7 @@ class AdminRepository implements BaseCredentialsRepository
             return 404;
         }
     }
-
+    
     public function getByid(int $id)
     {
         $conn = $this->database->connect();
