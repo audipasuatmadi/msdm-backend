@@ -26,7 +26,7 @@ class AdminService implements IAdminService
         $returnType = $this->repository->store($admin);
 
         if ($returnType['status'] == 201) {
-            $token = new Token('pawdfkg124tkqdc_aw21', $returnType['payload']);
+            $token = new Token(strval($returnType['payload']), $returnType['payload']);
             $this->tokenRepository->store($token);
             $adminId = $token->getAdminId();
             $returnType['payload'] = $adminId;
@@ -38,14 +38,14 @@ class AdminService implements IAdminService
     {
         $repositoryReturn = $this->repository->getByUsername($username);
         if ($repositoryReturn == 404) {
-            return 404;
+            return ['status' => 404];
         }  
 
         //TODO: create and return a token
         if (password_verify($password, $repositoryReturn['password'])) {
-            return 1;
+            return ['status' => 200, 'payload' => $repositoryReturn['id']];
         } else {
-            return 403;
+            return ['status'=> 403];
         }
         
     }

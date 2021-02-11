@@ -47,13 +47,13 @@ function handleLoginAdmin(AdminService $adminService, $requestBody) {
         $password = $requestBody['password'];
 
         $return = $adminService->login($username, $password);
-        if ($return == 1) {
-            http_response_code(201);
-            echo json_encode(["otherMessage" => "login berhasil"]);
-        } else if ($return == 404) {
+        if ($return['status'] == 200) {
+            http_response_code(200);
+            echo json_encode(["otherMessage" => "login berhasil", "payload" => $return['payload']]);
+        } else if ($return['status'] == 404) {
             http_response_code(404);
             echo json_encode(["username" => "username tidak ditemukan"]);
-        } else if ($return == 403) {
+        } else if ($return['status'] == 403) {
             http_response_code(403);
             echo json_encode(["password" => "password tidak valid"]);
         } else {

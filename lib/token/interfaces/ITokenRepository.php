@@ -10,5 +10,9 @@ interface ITokenRepository {
     public function getById(int $id);
     public function delete(IToken $modelObject);
     public function update(IToken $modelObject);
+    /**
+     *
+     * @return IToken
+     */
     public function getByAdminId(int $id);
 }
