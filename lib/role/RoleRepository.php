@@ -19,9 +19,7 @@ class RoleRepository implements IRoleRepository {
 
         $name = $role->getName();
 
-        $name = ucfirst(strtolower($name));
-
-        $stmt = $conn->prepare("INSERT INTO jabtan (nama) VALUES (?)");
+        $stmt = $conn->prepare("INSERT INTO jabatan (nama) VALUES (?)");
         $stmt->bind_param("s", $name);
 
         $executeResult = $stmt->execute();
