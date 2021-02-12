@@ -29,9 +29,10 @@ class EmployeeRepository implements IEmployeeRepository
         $stmt->bind_param("sdii", $nama, $workHours, $salary, $roleId);
 
         $executeResult = $stmt->execute();
+        $status = $conn->insert_id;
         $conn->close();
         if ($executeResult == 1) {
-            return ["status" => 201, "payload" => $conn->insert_id];
+            return ["status" => 201, "payload" => $status];
         } else {
             return ["status" => 500];
         }
@@ -42,11 +43,44 @@ class EmployeeRepository implements IEmployeeRepository
     }
     public function update(IEmployee $employee)
     {
+        $id = $employee->getId();
+        $name = $employee->getName();
+        $roleId = $employee->getRoleId();
+        $workHours = $employee->getWorkHours();
+        $salary = $employee->getSalary();
+
+        $conn = $this->database->connect();
+        $stmt = $conn->prepare("UPDATE karyawan SET nama=?, jam_kerja=?, gaji=?, jabatan_id=? WHERE id=?");
+        $stmt->bind_param("sdiii", $name, $workHours, $salary, $roleId, $id);
+
+        $executeResult = $stmt->execute();
+        $conn->close();
+
+        if ($executeResult == 1) {
+            return ["status" => 200];
+        } else {
+            return ["status" => 500];
+        }
+
     }
     public function getAll()
     {
     }
     public function delete(IEmployee $employee)
     {
+        $id = $employee->getId();
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("DELETE FROM karyawan WHERE id=?");
+        $stmt->bind_param("i", $id);
+
+        $executeResult = $stmt->execute();
+        $conn->close();
+        if ($executeResult == 1) {
+            return ['status' => 200];
+        } else {
+            return ['status' => 500];
+        }
+        
     }
 }
