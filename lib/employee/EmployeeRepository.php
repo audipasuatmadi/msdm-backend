@@ -23,7 +23,7 @@ class EmployeeRepository implements IEmployeeRepository
         $workHours = $employee->getWorkHours();
         $workHours = (double) $workHours;
         $salary = $employee->getSalary();
-        $roleId = $employee->getId();
+        $roleId = $employee->getRoleId();
 
         $stmt = $conn->prepare("INSERT INTO karyawan (nama, jam_kerja, gaji, jabatan_id) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("sdii", $nama, $workHours, $salary, $roleId);
