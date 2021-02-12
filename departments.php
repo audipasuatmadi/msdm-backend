@@ -18,7 +18,10 @@ function handleCreateDepartment(IDepartmentService $departmentService, $requestB
     $processReturn = $departmentService->store($name, $description);
     if ($processReturn['status'] == 201) {
         http_response_code(201);
-        echo json_encode(["otherMessage" => "department berhasil ditambahkan"]);
+        return json_encode(["otherMessage" => "department berhasil ditambahkan"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam menambah department"]);
     }
 }
 
@@ -30,7 +33,10 @@ function handleUpdateDepartment(IDepartmentService $departmentService, $requestB
     $processReturn = $departmentService->update($id, $name, $description);
     if ($processReturn['status'] == 200) {
         http_response_code(200);
-        echo json_encode(["otherMessage" => "department berhasil diperbaharui"]);
+        return json_encode(["otherMessage" => "department berhasil diperbaharui"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam memperbaharui department"]);
     }
 }
 
