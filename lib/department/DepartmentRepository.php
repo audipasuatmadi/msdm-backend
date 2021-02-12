@@ -34,6 +34,19 @@ class DepartmentRepository implements IDepartmentRepository
     }
     public function update(IDepartment $department)
     {
+        $conn = $this->database->connect();
+        $name = $department->getName();
+        $description = $department->getDescription();
+        $id = $department->getId();
+
+        $stmt = $conn->prepare("UPDATE departemen SET nama=?, deskripsi=? WHERE id=?");
+        $stmt->bind_param("ssi", $name, $description, $id);
+        $executeResult = $stmt->execute();
+        if ($executeResult == 1) {
+            return ['status' => 200, 'payload' => $conn->insert_id];
+        } else {
+            return ['status' => 500, 'payload' => $executeResult];
+        }
     }
     public function findById(int $id)
     {

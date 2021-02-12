@@ -24,7 +24,6 @@ function handleCreateAdmin(AdminService $adminService, $requestBody) {
         $password = $requestBody['password'];
 
         $return = $adminService->create($username, $password);
-        var_dump($return);
         if ($return['status'] == 201) {
             http_response_code(201);
             echo json_encode(["otherMessage" => "admin berhasil ditambahkan", "payload" => $return['payload']]);

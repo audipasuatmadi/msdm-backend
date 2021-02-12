@@ -11,7 +11,7 @@ class DepartmentService implements IDepartmentService
 
     public function __construct(IDepartmentRepository $repository)
     {
-        $this->$repository = $repository;
+        $this->repository = $repository;
     }
 
     public function store($name, $description)
@@ -25,6 +25,9 @@ class DepartmentService implements IDepartmentService
     }
     public function update($id, $name, $description)
     {
+        $department = new Department($name, $description, $id);
+        $repositoryResult = $this->repository->update($department);
+        return $repositoryResult;
     }
     public function delete($id)
     {
