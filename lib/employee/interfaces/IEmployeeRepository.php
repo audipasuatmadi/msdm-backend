@@ -8,4 +8,7 @@ interface IEmployeeRepository {
     public function update(IEmployee $employee);
     public function getAll();
     public function delete(IEmployee $employee);
+    public function searchByName(string $name);
+    public function searchByWorkHoursRange(float $from, float $until);
+    public function getCountByJob(int $min = 0);
 }
