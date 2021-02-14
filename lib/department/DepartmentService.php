@@ -2,6 +2,7 @@
 
 namespace lib\department;
 
+use lib\department\interfaces\IDepartment;
 use lib\department\interfaces\IDepartmentRepository;
 use lib\department\interfaces\IDepartmentService;
 
@@ -22,12 +23,19 @@ class DepartmentService implements IDepartmentService
     }
     public function findById($id)
     {
+        $department = $this->repository->findById($id);
+        return $department;
     }
-    public function update($id, $name, $description)
+    public function update($id, $name, $description, IDepartment $department = null)
     {
-        $department = new Department($name, $description, $id);
-        $repositoryResult = $this->repository->update($department);
-        return $repositoryResult;
+        if ($department == null) {
+            $department = new Department($name, $description, $id);
+            $repositoryResult = $this->repository->update($department);
+            return $repositoryResult;
+        } else {
+            $repositoryResult = $this->repository->update($department);
+            return $repositoryResult;
+        }
     }
     public function delete($id)
     {

@@ -40,6 +40,27 @@ class EmployeeRepository implements IEmployeeRepository
     }
     public function findById(int $id)
     {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM karyawan WHERE id=?");
+        $stmt->bind_param("i", $id);
+
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $results = $stmt->get_result();
+            if ($results->num_rows > 0) {
+                $employee = $results->fetch_assoc();
+                $conn->close();
+                return ["status" => 200, 'payload' => $employee];
+            } else {
+                $conn->close();
+                return ['status' => 404];
+            }
+        } else {
+            $conn->close();
+            return ['status' => 500];
+        }
+
     }
     public function update(IEmployee $employee)
     {
@@ -61,7 +82,6 @@ class EmployeeRepository implements IEmployeeRepository
         } else {
             return ["status" => 500];
         }
-
     }
     public function getAll()
     {
