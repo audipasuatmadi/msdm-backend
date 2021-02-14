@@ -28,7 +28,19 @@ class DepartmentEmployeeRepository implements IDepartmentEmployeeRepository {
             return ['status' => 500];
         }
     }
-    public function unassignFromDepartment(IEmployee $employee, IDepartment $department) {
+    public function unassignFromDepartment($employeeId, $departmentId) {
+        $conn = $this->database->connect();
 
+        $stmt = $conn->prepare("DELETE FROM departemen_karyawan WHERE karyawan_id=? AND departemen_id=?");
+        $stmt->bind_param("ii", $employeeId, $departmentId);
+
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $conn->close();
+            return ['status' => 200];
+        } else {
+            $conn->close();
+            return ['status' => 500];
+        }
     }
 }

@@ -16,4 +16,5 @@ interface IEmployeeService {
     public function searchByWorkHoursRange(float $from, float $until);
     public function getCountByJob(int $min = 0);
     public function assignToDepartment($id, IDepartmentService $departmentService, $departmentId);
+    public function unassignFromDepartment($id, $departmentId);
 }

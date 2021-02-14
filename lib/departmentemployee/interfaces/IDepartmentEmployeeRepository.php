@@ -9,5 +9,5 @@ use lib\employee\interfaces\IEmployee;
 interface IDepartmentEmployeeRepository {
     public function __construct(IDatabase $database);
     public function assignToDepartment($employeeId, $departmentId);
-    public function unassignFromDepartment(IEmployee $employee, IDepartment $department);
+    public function unassignFromDepartment($employeeId, $departmentId);
 }

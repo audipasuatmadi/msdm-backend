@@ -154,6 +154,25 @@ function handleAssignEmployeeToDepartment(IEmployeeService $employeeService, IDe
     }
 }
 
+function handleUnassignEmployeeFromDepartment(IEmployeeService $employeeService, $requestBody) {
+    $employeeId = $requestBody['employeeId'];
+    $departmentId = $requestBody['departmentId'];
+    
+    $processReturn = $employeeService->unassignFromDepartment($employeeId, $departmentId);
+    
+    if ($processReturn['status'] == 200) {
+        http_response_code(200);
+        return json_encode(["otherMessage" => "karyawan berhasil dikeluarkan ke department"]);
+    } elseif ($processReturn['status'] == 404) {
+        http_response_code(404);
+        return json_encode($processReturn);
+    }
+    else {
+        http_response_code(500);
+        return json_encode($processReturn);
+    }
+}
+
 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -192,6 +211,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     if ($requestBody['code'] == 9) {
         $response = handleAssignEmployeeToDepartment($employeeService, $departmentService, $requestBody);
+        echo $response;
+    }
+    if ($requestBody['code'] == 10) {
+        $response = handleUnassignEmployeeFromDepartment($employeeService, $requestBody);
         echo $response;
     }
 }

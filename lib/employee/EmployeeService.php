@@ -94,4 +94,18 @@ class EmployeeService implements IEmployeeService
         }
     }
 
+    public function unassignFromDepartment($id, $departmentId)
+    {
+        $employee = $this->findById($id);
+        if ($employee['status'] == 200) {
+            $employee = $employee['payload'];
+            
+            $result = $this->departmentEmployeeRepo->unassignFromDepartment($id, $departmentId);
+            return $result;
+        }
+         else {
+            return ['status' => '404', 'otherMessage' => 'karyawan tidak ditemukan'];
+        }
+    }
+
 }
