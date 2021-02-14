@@ -41,4 +41,14 @@ class EmployeeService implements IEmployeeService
         $repoReturn = $this->repository->delete($employee);
         return $repoReturn;
     }
+    public function searchByName(string $name)
+    {
+        $employees = $this->repository->searchByName($name);
+        return $employees;
+    }
+    public function searchByWorkHoursRange(float $from, float $until)
+    {
+        $employees = $this->repository->searchByWorkHoursRange($from, $until);
+        return $employees;
+    }
 }

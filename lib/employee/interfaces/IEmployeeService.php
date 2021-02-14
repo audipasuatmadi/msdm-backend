@@ -8,4 +8,6 @@ interface IEmployeeService {
     public function update($id, $name, $roleId, $workHours, $salary);
     public function getAll();
     public function delete($id);
+    public function searchByName(string $name);
+    public function searchByWorkHoursRange(float $from, float $until);
 }
