@@ -107,6 +107,27 @@ function handleSearchByWorkHoursRange(IEmployeeService $employeeService, $reques
     }
 }
 
+function handleGetCountByJob(IEmployeeService $employeeService, $requestBody) {
+    $args = 0;
+
+    if (isset($requestBody['min'])) {
+        $args = $requestBody['min'];
+    }
+    $processReturn = $employeeService->getCountByJob($args);
+    
+    if ($processReturn['status'] == 200) {
+        http_response_code(200);
+        return json_encode(["otherMessage" => "data karyawan berhasil diambil", "payload" => $processReturn['payload']]);
+    } elseif ($processReturn['status'] == 404) {
+        http_response_code(404);
+        return json_encode(["otherMessage" => "data karyawan tidak ditemukan"]);
+    }
+    else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam menghapus karyawan"]);
+    }
+}
+
 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -137,6 +158,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     if ($requestBody['code'] == 7) {
         $response = handleSearchByWorkHoursRange($employeeService, $requestBody);
+        echo $response;
+    }
+    if ($requestBody['code'] == 8) {
+        $response = handleGetCountByJob($employeeService, $requestBody);
         echo $response;
     }
 }

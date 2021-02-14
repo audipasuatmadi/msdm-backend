@@ -10,4 +10,5 @@ interface IEmployeeRepository {
     public function delete(IEmployee $employee);
     public function searchByName(string $name);
     public function searchByWorkHoursRange(float $from, float $until);
+    public function getCountByJob(int $min = 0);
 }

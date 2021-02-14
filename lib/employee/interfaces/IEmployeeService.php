@@ -10,4 +10,5 @@ interface IEmployeeService {
     public function delete($id);
     public function searchByName(string $name);
     public function searchByWorkHoursRange(float $from, float $until);
+    public function getCountByJob(int $min = 0);
 }

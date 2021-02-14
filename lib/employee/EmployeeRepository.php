@@ -144,7 +144,30 @@ class EmployeeRepository implements IEmployeeRepository
             $conn->close();
             return ['status' => 500];
         }
+    }
 
+    public function getCountByJob(int $min = 0)
+    {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("SELECT COUNT(karyawan.id) as jml_karyawan, jabatan.nama as nama_jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id GROUP BY jabatan.nama HAVING jml_karyawan > ?");
+        $stmt->bind_param("i", $min);
+
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $queryResult = $stmt->get_result();
+            if ($queryResult->num_rows > 0) {
+                $countData = $queryResult->fetch_all(MYSQLI_ASSOC);
+                $conn->close();
+                return ['status' => 200, 'payload' => $countData];
+            } else {
+                $conn->close();
+                return ['status' => 404];
+            }
+        } else {
+            $conn->close();
+            return ['status' => 500];
+        }
     }
 
 }
