@@ -60,8 +60,28 @@ class EmployeeRepository implements IEmployeeRepository
             $conn->close();
             return ['status' => 500];
         }
-
     }
+
+    public function findByRoles($roleArray)
+    {
+        $conn = $this->database->connect();
+        $roleArray = implode(",", $roleArray);
+        $stmt = $conn->prepare("SELECT * FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id AND jabatan.id IN ($roleArray) ORDER BY jabatan.id DESC");
+        
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $results = $stmt->get_result();
+            if ($results->num_rows > 0) {
+                $karyawan = $results->fetch_all(MYSQLI_ASSOC);
+                return ['status' => 200, 'payload' => $karyawan];
+            } else {
+                return ['status' => 404];
+            }
+        } else {
+            return ['status' => 500];
+        }
+    }
+
     public function update(IEmployee $employee)
     {
         $id = $employee->getId();

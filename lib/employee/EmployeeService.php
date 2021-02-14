@@ -30,6 +30,13 @@ class EmployeeService implements IEmployeeService
         $employee = $this->repository->findById($id);
         return $employee;
     }
+
+    public function findByRoles($roleIdArrays)
+    {
+        $employee = $this->repository->findByRoles($roleIdArrays);
+        return $employee;
+    }
+    
     public function update($id, $name, $roleId, $workHours, $salary, IEmployee $employee = null)
     {
         if ($employee == null) {
