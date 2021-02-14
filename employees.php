@@ -59,6 +59,21 @@ function handleDeleteEmployee(IEmployeeService $employeeService, $requestBody) {
     }
 }
 
+function handleGetAllEmployees(IEmployeeService $employeeService) {
+    $processReturn = $employeeService->getAll();
+    if ($processReturn['status'] == 200) {
+        http_response_code(200);
+        return json_encode(["otherMessage" => "semua data karyawan berhasil diambil", "payload" => $processReturn['payload']]);
+    } elseif ($processReturn['status'] == 404) {
+        http_response_code(404);
+        return json_encode(["otherMessage" => "belum terdapat data karyawan"]);
+    }
+    else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam menghapus karyawan"]);
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $requestBody = json_decode(file_get_contents('php://input'), true);
 
@@ -75,6 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     if ($requestBody['code'] == 4) {
         $response = handleDeleteEmployee($employeeService, $requestBody);
+        echo $response;
+    }
+    if ($requestBody['code'] == 5) {
+        $response = handleGetAllEmployees($employeeService);
         echo $response;
     }
 }

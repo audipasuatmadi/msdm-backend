@@ -65,6 +65,21 @@ class EmployeeRepository implements IEmployeeRepository
     }
     public function getAll()
     {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM karyawan");
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $results = $stmt->get_result();
+            if ($results->num_rows > 0) {
+                $allData = $results->fetch_all(MYSQLI_ASSOC);
+                return ["status" => 200, "payload" => $allData];
+            } else {
+                return ["status" => 404];
+            }
+        } else {
+            return ["status" => 500];
+        }
     }
     public function delete(IEmployee $employee)
     {

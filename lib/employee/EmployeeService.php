@@ -32,6 +32,8 @@ class EmployeeService implements IEmployeeService
     }
     public function getAll()
     {
+        $employees = $this->repository->getAll();
+        return $employees;
     }
     public function delete($id)
     {
