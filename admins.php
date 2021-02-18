@@ -19,7 +19,6 @@ function handleCreateAdmin(AdminService $adminService, $requestBody) {
         http_response_code(403);
         echo json_encode(["username" => "username harus diisi", "password" => "password harus diisi"]);
     } else {
-        
         $username = $requestBody['username'];
         $password = $requestBody['password'];
 
