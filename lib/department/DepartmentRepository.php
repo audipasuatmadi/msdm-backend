@@ -70,6 +70,28 @@ class DepartmentRepository implements IDepartmentRepository
             return ['status' => 500];
         }
     }
+    public function getAll()
+    {
+        $conn = $this->database->connect();
+        $stmt = $conn->prepare("SELECT * FROM departemen");
+
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $results = $stmt->get_result();
+            if ($results->num_rows > 0) {
+                $allData = $results->fetch_all(MYSQLI_ASSOC);
+                $conn->close();
+                return ["status" => 200, "payload" => $allData];
+            } else {
+                $conn->close();
+                return ["status" => 404];
+            }
+        } else {
+            $conn->close();
+            return ["status" => 500];
+        }
+    }
+
     public function delete(IDepartment $department)
     {
     }

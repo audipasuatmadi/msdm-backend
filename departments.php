@@ -40,6 +40,34 @@ function handleUpdateDepartment(IDepartmentService $departmentService, $requestB
     }
 }
 
+function handleGetAllDepartments(IDepartmentService $departmentService)
+{
+    $processReturn = $departmentService->getAll();
+    if ($processReturn['status'] == 200) {
+        http_response_code(200);
+        return json_encode(["otherMessage" => "semua data departmen berhasil diambil", "payload" => $processReturn['payload']]);
+    } elseif ($processReturn['status'] == 404) {
+        http_response_code(404);
+        return json_encode(["otherMessage" => "belum terdapat data departemen"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam mengambil departmen"]);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    $requestBody = $_GET;
+
+    if (!isset($requestBody['code'])) {
+        return 0;
+    }
+    if ($requestBody['code'] == 1) {
+        $response = handleGetAllDepartments($departmentService, $requestBody);
+        echo $response;
+    }
+
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $requestBody = json_decode(file_get_contents('php://input'), true);
 

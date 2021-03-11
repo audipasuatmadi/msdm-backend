@@ -110,8 +110,9 @@ class EmployeeRepository implements IEmployeeRepository
     public function getAll()
     {
         $conn = $this->database->connect();
+        // $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan");
+        $stmt = $conn->prepare("SELECT karyawan.*, gaji - (gaji * 0.02) AS gaji_bersih, jabatan.nama as jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id");
 
-        $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan");
         $execResult = $stmt->execute();
         if ($execResult == 1) {
             $results = $stmt->get_result();

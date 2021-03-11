@@ -11,6 +11,7 @@ use lib\employee\interfaces\IEmployeeService;
 
 require_once('./autoloader.php');
 
+
 $database = new Database();
 $employeeRepository = new EmployeeRepository($database);
 $departmentEmployeeRepo = new DepartmentEmployeeRepository($database);
@@ -23,9 +24,9 @@ function handleCreateEmployee(IEmployeeService $employeeService, $requestBody)
     $roleId = $requestBody['roleId'];
     $workHours = $requestBody['workHours'];
     $salary = $requestBody['salary'];
-
+    
     $processReturn = $employeeService->store($name, $roleId, $workHours, $salary);
-
+    
     if ($processReturn['status'] == 201) {
         http_response_code(201);
         return json_encode(["otherMessage" => "karyawan berhasil ditambahkan"]);
@@ -42,9 +43,9 @@ function handleUpdateEmployee(IEmployeeService $employeeService, $requestBody)
     $roleId = $requestBody['roleId'];
     $workHours = $requestBody['workHours'];
     $salary = $requestBody['salary'];
-
+    
     $processReturn = $employeeService->update($id, $name, $roleId, $workHours, $salary);
-
+    
     if ($processReturn['status'] == 200) {
         http_response_code(200);
         return json_encode(["otherMessage" => "karyawan berhasil diperbaharui"]);
@@ -57,7 +58,7 @@ function handleUpdateEmployee(IEmployeeService $employeeService, $requestBody)
 function handleDeleteEmployee(IEmployeeService $employeeService, $requestBody)
 {
     $id = $requestBody['id'];
-
+    
     $processReturn = $employeeService->delete($id);
     if ($processReturn['status'] == 200) {
         http_response_code(200);
@@ -124,7 +125,7 @@ function handleGetCountByJob(IEmployeeService $employeeService, $requestBody)
         $args = $requestBody['min'];
     }
     $processReturn = $employeeService->getCountByJob($args);
-
+    
     if ($processReturn['status'] == 200) {
         http_response_code(200);
         return json_encode(["otherMessage" => "data karyawan berhasil diambil", "payload" => $processReturn['payload']]);
@@ -141,9 +142,9 @@ function handleAssignEmployeeToDepartment(IEmployeeService $employeeService, IDe
 {
     $employeeId = $requestBody['employeeId'];
     $departmentId = $requestBody['departmentId'];
-
+    
     $processReturn = $employeeService->assignToDepartment($employeeId, $departmentService, $departmentId);
-
+    
     if ($processReturn['status'] == 200) {
         http_response_code(200);
         return json_encode(["otherMessage" => "karyawan berhasil ditambahkan ke department"]);
@@ -178,9 +179,9 @@ function handleUnassignEmployeeFromDepartment(IEmployeeService $employeeService,
 function handleGetByRoles(IEmployeeService $employeeService, $requestBody)
 {
     $roleIdArray = $requestBody['roleIds'];
-
+    
     $processReturn = $employeeService->findByRoles($roleIdArray);
-
+    
     if ($processReturn['status'] == 200) {
         http_response_code(200);
         return json_encode(["otherMessage" => "data karyawan berhasil diambil", "payload" => $processReturn['payload']]);
@@ -196,9 +197,9 @@ function handleGetByRoles(IEmployeeService $employeeService, $requestBody)
 function handleFindById(IEmployeeService $employeeService, $requestBody)
 {
     $id = $requestBody['id'];
-
+    
     $processReturn = $employeeService->findById($id);
-
+    
     if ($processReturn['status'] == 200) {
         http_response_code(200);
         return json_encode(["otherMessage" => "data karyawan berhasil diambil", "payload" => $processReturn['payload']]);
@@ -213,67 +214,73 @@ function handleFindById(IEmployeeService $employeeService, $requestBody)
 
 
 if($_SERVER['REQUEST_METHOD'] == "GET") {
-    $requestBody = json_decode(file_get_contents('php://input'), true);
+    // $requestBody = json_decode(file_get_contents('php://input'), true);
     $response = json_encode(["otherMessage" => "API route tidak ditemukan"]);
+    
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
+    $requestBody = $_GET;
 
+
+    
     if (!isset($requestBody['code'])) {
         return 0;
     }
-
+    
     switch($requestBody['code']) {
         case 1:
             $response = handleFindById($employeeService, $requestBody);
-            break;
+        break;
         case 2:
             $response = handleGetAllEmployees($employeeService);
-            break;
+        break;
         case 3:
             $response = handleSearchByName($employeeService, $requestBody);
-            break;
+        break;
         case 4:
             $response = handleSearchByWorkHoursRange($employeeService, $requestBody);
-            break;
+        break;
         case 5:
             $response = handleGetCountByJob($employeeService, $requestBody);
-            break;
+        break;
         case 6:
             $response = handleGetByRoles($employeeService, $requestBody);
-            break;
+        break;
         default:
-            http_response_code(404);
+        http_response_code(404);
             break;
-    }
+        }
     echo $response;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $requestBody = json_decode(file_get_contents('php://input'), true);
     $response = json_encode(["otherMessage" => "API route tidak ditemukan"]);
-
+    
     if (!isset($requestBody['code'])) {
         return 0;
     }
-
+    
     switch($requestBody['code']) {
         case 1:
             $response = handleCreateEmployee($employeeService, $requestBody);
-            break;
+        break;
         case 2:
             $response = handleUpdateEmployee($employeeService, $requestBody);
-            break;
+        break;
         case 3:
             $response = handleDeleteEmployee($employeeService, $requestBody);
-            break;
+        break;
         case 4:
             $response = handleAssignEmployeeToDepartment($employeeService, $departmentService, $requestBody);
-            break;
+        break;
         case 5:
             $response = handleUnassignEmployeeFromDepartment($employeeService, $requestBody);
-            break;
+        break;
         default:
-            http_response_code(404);
-            break;
-    }
+        http_response_code(404);
+    break;
+}
 
     echo $response;
 }

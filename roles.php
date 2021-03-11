@@ -69,6 +69,19 @@ function handleDeleteRole(IRoleService $roleService, $requestBody) {
     }
 }
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    $requestBody = json_decode(file_get_contents('php://input'), true);
+    $requestBody = $_GET;
+    
+    if ($requestBody['code'] == 1) {
+        $response = handleGetAllRoles($roleService);
+        echo $response;
+    } 
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $requestBody = json_decode(file_get_contents('php://input'), true);
 
