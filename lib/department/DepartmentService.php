@@ -42,5 +42,7 @@ class DepartmentService implements IDepartmentService
     }
     public function getAll()
     {
+        $departments = $this->repository->getAll();
+        return $departments;
     }
 }

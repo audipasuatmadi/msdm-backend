@@ -11,4 +11,5 @@ interface IDepartmentRepository
      */
     public function findById(int $id);
     public function delete(IDepartment $department);
+    public function getAll();
 }
