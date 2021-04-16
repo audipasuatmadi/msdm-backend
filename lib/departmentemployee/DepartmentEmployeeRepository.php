@@ -15,7 +15,7 @@ class DepartmentEmployeeRepository implements IDepartmentEmployeeRepository {
     public function assignToDepartment($employeeId, $departmentId) {
         $conn = $this->database->connect();
 
-        $stmt = $conn->prepare("SELECT COUNT(1) FROM departemen_karyawan WHERE karyawan_id=?");
+        $stmt = $conn->prepare("SELECT * FROM departemen_karyawan WHERE karyawan_id=?");
         $stmt->bind_param('i', $employeeId);
 
         $execResult = $stmt->execute();

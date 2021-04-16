@@ -158,10 +158,11 @@ function handleCreateEmployee(IEmployeeService $employeeService, $requestBody, I
         if (isset($requestBody['departmentId'])) {
             $id = $processReturn['payload'];
             $prp = [
-                "employeeId" => $id,
+                "employeeId" => intval($id),
                 "departmentId" => $requestBody['departmentId']
             ];
-            // $employeeService->assignToDepartment($employeeService,  $departmentService, $prp);
+            $depId = $requestBody['departmentId'];
+            return json_encode($employeeService->assignToDepartment($id, $departmentService, $depId));
         }
         http_response_code(201);
         return json_encode(["otherMessage" => "karyawan berhasil ditambahkan"]);

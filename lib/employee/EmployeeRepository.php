@@ -125,6 +125,7 @@ class EmployeeRepository implements IEmployeeRepository
             JOIN jabatan ON jabatan.id=karyawan.jabatan_id
             LEFT JOIN departemen_karyawan on karyawan.id=departemen_karyawan.karyawan_id
             LEFT JOIN departemen ON departemen.id=departemen_karyawan.departemen_id
+            ORDER BY karyawan.id ASC
         ");
 
         $execResult = $stmt->execute();
@@ -143,11 +144,9 @@ class EmployeeRepository implements IEmployeeRepository
             return ["status" => 500];
         }
     }
-    public function delete(IEmployee $employee)
+    public function delete($id)
     {
-        $id = $employee->getId();
         $conn = $this->database->connect();
-
         $stmt = $conn->prepare("DELETE FROM karyawan WHERE id=?");
         $stmt->bind_param("i", $id);
 

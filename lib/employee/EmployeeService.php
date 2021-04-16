@@ -55,8 +55,7 @@ class EmployeeService implements IEmployeeService
     }
     public function delete($id)
     {
-        $employee = new Employee('a', 1, 1, 1, $id);
-        $repoReturn = $this->repository->delete($employee);
+        $repoReturn = $this->repository->delete($id);
         return $repoReturn;
     }
     public function searchByName(string $name)
