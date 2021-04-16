@@ -62,10 +62,12 @@ class EmployeeRepository implements IEmployeeRepository
         }
     }
 
+    # Kelompok E_1 Praktikum Basis Data 2021
     public function findByRoles($roleArray)
     {
         $conn = $this->database->connect();
         $roleArray = implode(",", $roleArray);
+        
         $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id AND jabatan.id IN ($roleArray) ORDER BY jabatan.id DESC");
         
         $execResult = $stmt->execute();
@@ -111,7 +113,19 @@ class EmployeeRepository implements IEmployeeRepository
     {
         $conn = $this->database->connect();
         // $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan");
-        $stmt = $conn->prepare("SELECT karyawan.*, gaji - (gaji * 0.02) AS gaji_bersih, jabatan.nama as jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id");
+        $stmt = $conn->prepare("SELECT 
+                karyawan.id, 
+                karyawan.nama, 
+                karyawan.jam_kerja, 
+                karyawan.gaji, 
+                gaji - (gaji * 0.02) AS gaji_bersih, 
+                jabatan.nama as jabatan, 
+                departemen.nama as nama_departemen
+            FROM karyawan 
+            JOIN jabatan ON jabatan.id=karyawan.jabatan_id
+            LEFT JOIN departemen_karyawan on karyawan.id=departemen_karyawan.karyawan_id
+            LEFT JOIN departemen ON departemen.id=departemen_karyawan.departemen_id
+        ");
 
         $execResult = $stmt->execute();
         if ($execResult == 1) {
@@ -147,10 +161,12 @@ class EmployeeRepository implements IEmployeeRepository
         }
     }
 
+    # Kelompok E_1 Praktikum Basis Data 2021
     public function searchByName(string $name) {
         $conn = $this->database->connect();
 
         $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan WHERE nama LIKE \"$name%\" OR nama LIKE \"% $name%\"");
+       
         $executeResult = $stmt->execute();
 
         if ($executeResult == 1) {
@@ -169,6 +185,7 @@ class EmployeeRepository implements IEmployeeRepository
         }
     }
 
+    # Kelompok E_1 Praktikum Basis Data 2021
     public function searchByWorkHoursRange(float $from, float $until)
     {
         $conn = $this->database->connect();
@@ -195,7 +212,8 @@ class EmployeeRepository implements IEmployeeRepository
             return ['status' => 500];
         }
     }
-
+    
+    # Kelompok E_1 Praktikum Basis Data 2021
     public function getCountByJob(int $min = 0)
     {
         $conn = $this->database->connect();
