@@ -8,6 +8,7 @@ use lib\department\interfaces\IDepartmentService;
 interface IEmployeeService {
     public function store($name, $roleId, $workHours, $salary);
     public function findById(int $id);
+    public function findByRoles($roleIdArrays);
     public function update($id, $name, $roleId, $workHours, $salary);
     public function updateWithObject(IEmployee $employee);
     public function getAll();

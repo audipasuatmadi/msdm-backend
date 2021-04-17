@@ -30,6 +30,13 @@ class EmployeeService implements IEmployeeService
         $employee = $this->repository->findById($id);
         return $employee;
     }
+
+    public function findByRoles($roleIdArrays)
+    {
+        $employee = $this->repository->findByRoles($roleIdArrays);
+        return $employee;
+    }
+    
     public function update($id, $name, $roleId, $workHours, $salary, IEmployee $employee = null)
     {
         if ($employee == null) {
@@ -48,8 +55,7 @@ class EmployeeService implements IEmployeeService
     }
     public function delete($id)
     {
-        $employee = new Employee('a', 1, 1, 1, $id);
-        $repoReturn = $this->repository->delete($employee);
+        $repoReturn = $this->repository->delete($id);
         return $repoReturn;
     }
     public function searchByName(string $name)
