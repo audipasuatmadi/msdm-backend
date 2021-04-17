@@ -117,7 +117,8 @@ class EmployeeRepository implements IEmployeeRepository
                 karyawan.id, 
                 karyawan.nama, 
                 karyawan.jam_kerja, 
-                karyawan.gaji, 
+                karyawan.gaji,
+                karyawan.jabatan_id, 
                 gaji - (gaji * 0.02) AS gaji_bersih, 
                 jabatan.nama as jabatan, 
                 departemen.nama as nama_departemen
@@ -217,7 +218,17 @@ class EmployeeRepository implements IEmployeeRepository
     {
         $conn = $this->database->connect();
 
-        $stmt = $conn->prepare("SELECT COUNT(karyawan.id) as jml_karyawan, jabatan.nama as nama_jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id GROUP BY jabatan.nama HAVING jml_karyawan > ?");
+        // $stmt = $conn->prepare("SELECT jabatan.id, COUNT(karyawan.id) as jml_karyawan, jabatan.nama as nama_jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id GROUP BY jabatan.nama HAVING jml_karyawan > ?");
+        $stmt = $conn->prepare("SELECT 
+                jabatan.id, 
+                COUNT(karyawan.id) as jml_karyawan, 
+                jabatan.nama as nama_jabatan 
+            FROM jabatan 
+            LEFT JOIN karyawan 
+                ON jabatan.id=karyawan.jabatan_id 
+            GROUP BY jabatan.nama 
+            HAVING jml_karyawan >= ?
+        ");
         $stmt->bind_param("i", $min);
 
         $execResult = $stmt->execute();

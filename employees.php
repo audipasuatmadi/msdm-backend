@@ -22,24 +22,6 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
 
-function handleUpdateEmployee(IEmployeeService $employeeService, $requestBody)
-{
-    $id = $requestBody['id'];
-    $name = $requestBody['name'];
-    $roleId = $requestBody['roleId'];
-    $workHours = $requestBody['workHours'];
-    $salary = $requestBody['salary'];
-
-    $processReturn = $employeeService->update($id, $name, $roleId, $workHours, $salary);
-
-    if ($processReturn['status'] == 200) {
-        http_response_code(200);
-        return json_encode(["otherMessage" => "karyawan berhasil diperbaharui"]);
-    } else {
-        http_response_code(500);
-        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam memperbaharui karyawan"]);
-    }
-}
 
 function handleDeleteEmployee(IEmployeeService $employeeService, $requestBody)
 {
@@ -172,6 +154,29 @@ function handleCreateEmployee(IEmployeeService $employeeService, $requestBody, I
     }
 }
 
+function handleUpdateEmployee(IEmployeeService $employeeService, $requestBody, IDepartmentService $departmentService)
+{
+    $id = $requestBody['id'];
+    $name = $requestBody['name'];
+    $roleId = $requestBody['roleId'];
+    $workHours = $requestBody['workHours'];
+    $salary = $requestBody['salary'];
+
+    $processReturn = $employeeService->update($id, $name, $roleId, $workHours, $salary);
+
+    if ($processReturn['status'] == 200) {
+        if (isset($requestBody['departmentId'])) {
+            $depId = $requestBody['departmentId'];
+            return json_encode($employeeService->assignToDepartment($id, $departmentService, $depId));
+        }
+        http_response_code(200);
+        return json_encode(["otherMessage" => "karyawan berhasil diperbaharui"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam memperbaharui karyawan"]);
+    }
+}
+
 function handleUnassignEmployeeFromDepartment(IEmployeeService $employeeService, $requestBody)
 {
     $employeeId = $requestBody['employeeId'];
@@ -235,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $requestBody = $_GET;
 
 
-
     if (!isset($requestBody['code'])) {
         return 0;
     }
@@ -280,7 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $response = handleCreateEmployee($employeeService, $requestBody, $departmentService);
             break;
         case 2:
-            $response = handleUpdateEmployee($employeeService, $requestBody);
+            $response = handleUpdateEmployee($employeeService, $requestBody, $departmentService);
             break;
         case 3:
             $response = handleDeleteEmployee($employeeService, $requestBody);
