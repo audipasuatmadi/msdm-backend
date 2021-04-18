@@ -80,6 +80,7 @@ class InvestorRepository implements IInvestorRepository
         $stmt = $conn->prepare(
             "DELETE FROM investor WHERE id=?"
         );
+        $stmt->prepare("i", $id);
 
         $execResult = $stmt->execute();
         if ($execResult == 1) {
