@@ -42,6 +42,13 @@ function handleDeleteInvestor(IInvestorService $service, $requestBody) {
     return 'succcess';
 }
 
+function handleGetStakeholders(IInvestorService $service) {
+    $processReturn = $service->getStakeholders();
+    $status = $processReturn['status'];
+    http_response_code($status);
+    return json_encode($processReturn['payload']);
+}
+
 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -81,6 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     switch($requestBody['code']) {
         case 1:
             $response = handleGetAllInvestors($investorService);
+            break;
+        case 2:
+            $response = handleGetStakeholders($investorService);
             break;
         default:
             http_response_code(404);

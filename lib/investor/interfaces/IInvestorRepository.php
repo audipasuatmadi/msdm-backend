@@ -7,4 +7,5 @@ interface IInvestorRepository {
     public function getAll();
     public function update($id, $name, $stocks);
     public function delete($id);
+    public function getStakeholders();
 }
