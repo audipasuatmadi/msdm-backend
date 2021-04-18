@@ -21,7 +21,7 @@ class InvestorRepository implements IInvestorRepository
             "INSERT INTO investor (nama, jml_saham)
             VALUES (?, ?)"
         );
-        $stmt->prepare("si", $name, $stocks);
+        $stmt->bind_param("si", $name, $stocks);
         $execResult = $stmt->execute();
         if ($execResult == 1) {
             $conn->close();
