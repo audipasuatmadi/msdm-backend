@@ -68,8 +68,23 @@ class EmployeeRepository implements IEmployeeRepository
         $conn = $this->database->connect();
         $roleArray = implode(",", $roleArray);
         
-        $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id AND jabatan.id IN ($roleArray) ORDER BY jabatan.id DESC");
-        
+        // $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id AND jabatan.id IN ($roleArray) ORDER BY jabatan.id DESC");
+        $stmt = $conn->prepare("SELECT 
+                karyawan.id, 
+                karyawan.nama, 
+                karyawan.jam_kerja, 
+                karyawan.gaji,
+                karyawan.jabatan_id, 
+                gaji - (gaji * 0.02) AS gaji_bersih, 
+                jabatan.nama as jabatan, 
+                departemen.nama as nama_departemen
+            FROM karyawan 
+            JOIN jabatan ON jabatan.id=karyawan.jabatan_id
+            LEFT JOIN departemen_karyawan on karyawan.id=departemen_karyawan.karyawan_id
+            LEFT JOIN departemen ON departemen.id=departemen_karyawan.departemen_id
+            WHERE jabatan.id IN ($roleArray) ORDER BY jabatan.id ASC"
+        );
+
         $execResult = $stmt->execute();
         if ($execResult == 1) {
             $results = $stmt->get_result();
@@ -165,7 +180,22 @@ class EmployeeRepository implements IEmployeeRepository
     public function searchByName(string $name) {
         $conn = $this->database->connect();
 
-        $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan WHERE nama LIKE \"$name%\" OR nama LIKE \"% $name%\"");
+        // $stmt = $conn->prepare("SELECT *, gaji - (gaji * 0.02) AS gaji_bersih FROM karyawan WHERE nama LIKE \"$name%\" OR nama LIKE \"% $name%\"");
+        $stmt = $conn->prepare("SELECT 
+                karyawan.id, 
+                karyawan.nama, 
+                karyawan.jam_kerja, 
+                karyawan.gaji,
+                karyawan.jabatan_id, 
+                gaji - (gaji * 0.02) AS gaji_bersih, 
+                jabatan.nama as jabatan, 
+                departemen.nama as nama_departemen
+            FROM karyawan 
+            JOIN jabatan ON jabatan.id=karyawan.jabatan_id
+            LEFT JOIN departemen_karyawan on karyawan.id=departemen_karyawan.karyawan_id
+            LEFT JOIN departemen ON departemen.id=departemen_karyawan.departemen_id
+            WHERE karyawan.nama LIKE \"$name%\" OR karyawan.nama LIKE \"% $name%\""
+        );
        
         $executeResult = $stmt->execute();
 
