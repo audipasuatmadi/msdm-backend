@@ -90,4 +90,26 @@ class InvestorRepository implements IInvestorRepository
         $conn->close();
         return ["status" => 500];
     }
+
+    public function getStakeholders()
+    {
+        $conn = $this->database->connect();
+        //menggunakan VIEW
+        $stmt = $conn->prepare(
+            "SELECT * FROM stakeholders"
+        );
+        $execResult = $stmt->execute();
+        if ($execResult == 1) {
+            $results = $stmt->get_result();
+            if ($results->num_rows > 0) {
+                $allInvestor = $results->fetch_all(MYSQLI_ASSOC);
+                $conn->close();
+                return ["status" => 200, "payload" => $allInvestor];
+            }
+            $conn->close();
+            return ["status" => 404];
+        }
+        $conn->close();
+        return ["status" => 500];
+    }
 }

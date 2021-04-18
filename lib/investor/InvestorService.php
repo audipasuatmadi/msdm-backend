@@ -32,4 +32,9 @@ class InvestorService implements IInvestorService
     {
         return $this->repository->delete($id);
     }
+
+    public function getStakeholders()
+    {
+        return $this->repository->getStakeholders();
+    }
 }
