@@ -2,4 +2,4 @@
 
 namespace lib\investor\interfaces;
 
-interface IInvestorService extends IInvestorService {};
+interface IInvestorService extends IInvestorRepository {};
