@@ -39,6 +39,8 @@ class DepartmentService implements IDepartmentService
     }
     public function delete($id)
     {
+        $repoReturn = $this->repository->delete($id);
+        return $repoReturn;
     }
     public function getAll()
     {

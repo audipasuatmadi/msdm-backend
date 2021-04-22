@@ -92,7 +92,20 @@ class DepartmentRepository implements IDepartmentRepository
         }
     }
 
-    public function delete(IDepartment $department)
+    public function delete($id)
     {
+        $conn = $this->database->connect();
+        $stmt = $conn->prepare("DELETE FROM departemen WHERE id=?");
+        $stmt->bind_param("i", $id);
+
+        $executeResult = $stmt->execute();
+        if ($executeResult == 1){
+            $conn->close();
+            return ['status' => 200];
+        } else {
+            $conn->close();
+            return ['status' => 500];
+        }
+
     }
 }
