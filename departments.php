@@ -40,6 +40,18 @@ function handleUpdateDepartment(IDepartmentService $departmentService, $requestB
     }
 }
 
+function handleDeleteDepartement(IDepartmentService $departmentService, $requestBody)
+{
+    $processReturn = $departmentService->delete($requestBody['id']);
+    if ($processReturn['status'] == 200) {
+        http_response_code(200);
+        return json_encode(["otherMessage" => "departemen berhasil dihapus"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["otherMessage" => "terjadi kesalahan backend dalam menghapus departemen"]);
+    }
+}
+
 function handleGetAllDepartments(IDepartmentService $departmentService)
 {
     $processReturn = $departmentService->getAll();
@@ -54,6 +66,7 @@ function handleGetAllDepartments(IDepartmentService $departmentService)
         return json_encode(["otherMessage" => "terjadi kesalahan backend dalam mengambil departmen"]);
     }
 }
+
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -85,4 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $response = handleUpdateDepartment($departmentService, $requestBody);
         echo $response;
     } 
+    if ($requestBody['code'] == 3) {
+        $response = handleDeleteDepartement($departmentService, $requestBody);
+        echo $response;
+    }
 }
