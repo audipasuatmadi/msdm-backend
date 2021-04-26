@@ -92,15 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $response = handleCreateRole($roleService, $requestBody);
         echo $response;
     }
-    if ($requestBody['code'] == 3) {
+    if ($requestBody['code'] == 2) {
         $response = handleUpdateRole($roleService, $requestBody);
         echo $response;
     }
-    if ($requestBody['code'] == 4) {
+    if ($requestBody['code'] == 3) {
         $response = handleDeleteRole($roleService, $requestBody);
         echo $response;
     }
-    if ($requestBody['code'] == 5) {
+    if ($requestBody['code'] == 4) {
         $response = handleGetAllRoles($roleService);
         echo $response;
     } 
