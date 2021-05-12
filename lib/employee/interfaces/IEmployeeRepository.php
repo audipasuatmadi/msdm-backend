@@ -10,6 +10,6 @@ interface IEmployeeRepository {
     public function delete(IEmployee $employee);
     public function searchByName(string $name);
     public function searchByWorkHoursRange(float $from, float $until);
-    public function getCountByJob(int $min = 0);
+    public function getCountByJob(int $min = 0, int $max = 1000);
     public function findByRoles($roleArray);
 }

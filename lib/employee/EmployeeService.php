@@ -68,9 +68,9 @@ class EmployeeService implements IEmployeeService
         $employees = $this->repository->searchByWorkHoursRange($from, $until);
         return $employees;
     }
-    public function getCountByJob(int $min = 0)
+    public function getCountByJob(int $min = 0, int $max = 1000)
     {
-        $countData = $this->repository->getCountByJob($min);
+        $countData = $this->repository->getCountByJob($min, $max);
         return $countData;
     }
 
