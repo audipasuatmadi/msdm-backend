@@ -87,12 +87,16 @@ function handleSearchByWorkHoursRange(IEmployeeService $employeeService, $reques
 
 function handleGetCountByJob(IEmployeeService $employeeService, $requestBody)
 {
-    $args = 0;
+    $min = 0;
+    $max = 1000;
 
     if (isset($requestBody['min'])) {
-        $args = $requestBody['min'];
+        $min = $requestBody['min'];  
     }
-    $processReturn = $employeeService->getCountByJob($args);
+    if (isset($requestBody['max'])) {
+        $max = $requestBody['max'];
+    }
+    $processReturn = $employeeService->getCountByJob($min, $max);
 
     if ($processReturn['status'] == 200) {
         http_response_code(200);

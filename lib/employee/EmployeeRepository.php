@@ -244,11 +244,9 @@ class EmployeeRepository implements IEmployeeRepository
     }
     
     # Kelompok E_1 Praktikum Basis Data 2021
-    public function getCountByJob(int $min = 0)
+    public function getCountByJob(int $min = 0, int $max = 1000)
     {
         $conn = $this->database->connect();
-
-        // $stmt = $conn->prepare("SELECT jabatan.id, COUNT(karyawan.id) as jml_karyawan, jabatan.nama as nama_jabatan FROM karyawan JOIN jabatan WHERE jabatan.id=karyawan.jabatan_id GROUP BY jabatan.nama HAVING jml_karyawan > ?");
         $stmt = $conn->prepare("SELECT 
                 jabatan.id, 
                 COUNT(karyawan.id) as jml_karyawan, 
@@ -257,9 +255,9 @@ class EmployeeRepository implements IEmployeeRepository
             LEFT JOIN karyawan 
                 ON jabatan.id=karyawan.jabatan_id 
             GROUP BY jabatan.nama 
-            HAVING jml_karyawan >= ?
+            HAVING jml_karyawan BETWEEN (?) AND (?)
         ");
-        $stmt->bind_param("i", $min);
+        $stmt->bind_param("ii", $min, $max);
 
         $execResult = $stmt->execute();
         if ($execResult == 1) {
